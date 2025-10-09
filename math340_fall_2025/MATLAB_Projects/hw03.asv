@@ -1,0 +1,122 @@
+% Homework 3
+% NAME: Troy Chin
+% DATE: 09/27/2025
+
+% ------------------------------------------- %
+
+x = 0:6; 
+y = [15 18 21 20 17 14 11];
+u = linspace(min(x), max(x), 200);
+v_linear = interp1(x,y,u,'linear');
+v_poly = polyval(polyfit(x,y,length(x)-1), u);
+v_spline = spline(x,y,u);
+v_pchip = pchip(x,y,u);
+
+figure;
+subplot(2,2,1);
+plot(x,y,'o', u,v_linear,'g','LineWidth', 1.5);
+title('Linear Interpolant');
+legend('Data','Linear','Location','Best');
+grid on;
+
+subplot(2,2,2);
+plot(x,y,'o',u,v_poly,'r','LineWidth', 1.5);
+title('Polynomial Interpolant');
+legend('Data','Poly', 'Location', 'Best');
+grid on;
+
+subplot(2,2,3);
+plot(x,y,'o',u,v_spline, 'c', 'LineWidth', 1.5);
+title('Cubic Spline Interpolant');
+legend('Data', 'Spline','Location','Best');
+grid on;
+
+subplot(2,2,4);
+plot(x,y,'o',u,v_pchip,'m','Linewidth', 1.5);
+title('PCHIP');
+legend('Data','PCHIP','Location','Best');
+grid on;
+
+sgtitle('Comparison of Interpolants');
+
+% ------------------------------------------- %
+
+W = [10 27 2001 5 10 4 8
+    11 19 2001 7 4 5 11
+    12 03 2001 8 12 6 4
+    12 20 2001 10 14 8 7
+    01 09 2002 12 13 10 3
+    01 23 2002 14 8 12 0
+    03 06 2002 16 10 13 10];
+
+t = datetime(W(:, [3,1,2]));
+
+Tom = W(:, 4) + W(:, 5)/16;
+Ben = W(:, 6) + W(:, 7)/16;
+
+figure(2); clf;
+plot(t, Tom, 'o-', 'LineWidth', 1.5);
+hold on;
+plot(t, Ben, 's--', 'LineWidth', 1.5);
+title('Tom and Ben Data Over Time');
+xlabel('Date');
+ylabel('Value');
+legend('Tom', 'Ben', 'Location', 'Best');
+grid on;
+hold off;
+
+% Define interpolant data
+x = [-1 -0.5 0 0.5 1];
+y = [0 -0.5 1 0.5 0];
+xx = linspace(-1,1,200);
+
+% Interpolants
+yy_piecelin = interp1(x,y,xx,'linear');     % Piecewise linear
+p = polyfit(x,y,length(x)-1);               % Polynomial coefficients
+yy_poly = polyval(p,xx);                    % Polynomial values
+yy_spline = spline(x,y,xx);                 % Cubic spline
+yy_pchip  = pchip(x,y,xx);                  % PCHIP
+
+% Plot results
+figure(3); clf;
+
+subplot(2,2,1)
+plot(x,y,'o',xx,yy_piecelin,'g','LineWidth',1.5)
+title('Piecewise Linear')
+legend('Data','piecelin','Location','Best')
+grid on
+
+subplot(2,2,2)
+plot(x,y,'o',xx,yy_poly,'r','LineWidth',1.5)
+title('Polynomial')
+legend('Data','polyinterp','Location','Best')
+grid on
+
+subplot(2,2,3)
+plot(x,y,'o',xx,yy_spline,'c','LineWidth',1.5)
+title('Cubic Spline')
+legend('Data','splinetx','Location','Best')
+grid on
+
+subplot(2,2,4)
+plot(x,y,'o',xx,yy_pchip,'m','LineWidth',1.5)
+title('PCHIP')
+legend('Data','pchiptx','Location','Best')
+grid on
+
+sgtitle('Comparison of Interpolants for [-1,1]')
+
+% ------------------------------------------- %
+
+% Question 4
+figure('position',get(0,'screensize'))
+axes('position',[0 0 1 1])
+[x,y] = ginput;
+n = length(x);
+s = (1:n)';
+t = (1:.05:n)';
+u = spline(s,x,t);
+clf reset;
+plot(x,y,'.',u,v,'-');
+
+% ---------------------------------
